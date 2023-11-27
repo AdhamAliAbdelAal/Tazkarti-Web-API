@@ -25,11 +25,20 @@ public class AuthController: Controller
     
     [HttpPost]
     [Route("register")]
-    public ActionResult<string> Register([FromBody] RegisterDto request)
+    public async Task<ActionResult<RegisterResponseDto>> Register([FromBody] RegisterDto request)
     {
         var data = _mapper.Map<RegisterModel>(request);
-        var token = _authHandler.Register(data);
-        return Ok(token);
+        var token = await _authHandler.Register(data);
+        return Ok(new RegisterResponseDto(token));
+    }
+    
+    [HttpPost]
+    [Route("login")]
+    public async Task<ActionResult<LoginResponseDto>> Login([FromBody] LoginDto request)
+    {
+        var data = _mapper.Map<LoginModel>(request);
+        var token = await _authHandler.Login(data);
+        return Ok(new LoginResponseDto(token));
     }
     
     

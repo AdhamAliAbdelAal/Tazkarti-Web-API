@@ -16,12 +16,6 @@ public class UserHandler : IUserHandler
         _userDao = userDao;
     }
 
-    public async Task<UserModel> GetUserById(string id)
-    {
-        var user = await _userDao.GetUserByIdAsync(id);
-        return _mapper.Map<UserModel>(user);
-    }
-
     public async Task<UserModel> GetUserByUsername(string username)
     {
         var user = await _userDao.GetUserByUsernameAsync(username);

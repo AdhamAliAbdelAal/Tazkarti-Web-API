@@ -11,12 +11,6 @@ public class UserDao : IUserDao
     {
         _dbContext = dbContext;
     }
-    
-    public async Task<UserDbModel?> GetUserByIdAsync(string id)
-    {
-        var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == id);
-        return user;
-    }
 
     public async Task<UserDbModel?> GetUserByUsernameAsync(string username)
     {

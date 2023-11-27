@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using TazkartiDataAccessLayer.DataTypes;
 using TazkartiDataAccessLayer.Models;
 
 namespace TazkartiDataAccessLayer.DbContexts;
@@ -26,6 +27,17 @@ public class TazkartiDbContext : DbContext
         modelBuilder.Entity<UserDbModel>()
             .HasIndex(u => u.Username)
             .IsUnique();
+        
+        // add default data
+        modelBuilder.Entity<UserDbModel>().HasData(
+            new UserDbModel()
+            {
+                Id = 1,
+                Username = "adhoma",
+                Password = "0111",
+                Status = UserStatus.Approved,
+            }
+        );
         
         base.OnModelCreating(modelBuilder);
     }
