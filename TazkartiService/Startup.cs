@@ -2,6 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using TazkartiBusinessLayer.Auth;
+using TazkartiBusinessLayer.Handlers;
+using TazkartiDataAccessLayer.DAOs;
 using TazkartiDataAccessLayer.DbContexts;
 
 namespace TazkartiService;
@@ -26,6 +29,8 @@ public class Startup
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "TazkartiApi", Version = "v1" });
         });
         
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        
         services.AddAuthentication("Bearer")
             .AddJwtBearer(options =>
             {
@@ -49,7 +54,9 @@ public class Startup
                 policy.RequireClaim("name", "adham");
             });
         });
-
+        
+        this.DependencyRegistry(services);
+        
         services.AddDbContext<TazkartiDbContext>(options =>
             options.UseSqlite(this.Configuration["ConnectionStrings:TazkartiDbContextConnection"] ?? string.Empty));
     }
@@ -64,24 +71,34 @@ public class Startup
 
         app.UseHttpsRedirection();
         
-        // app.UseRouting();
+        app.UseRouting();
         
         app.UseAuthentication();
         app.UseAuthorization();
         
-        // app.UseEndpoints(endpoints =>
-        // {
-        //     endpoints.MapControllers();
-        // });
-        //
-        // add cookie endpoint
-        app.Map("/cookie", app =>
+        app.UseEndpoints(endpoints =>
         {
-            app.Run(async context =>
-            {
-                context.Response.Cookies.Append("name", "adham");
-                await context.Response.WriteAsync("Hello from cookie endpoint");
-            });
+            endpoints.MapControllers();
         });
+        
+        // add cookie endpoint
+        // app.Map("/cookie", app =>
+        // {
+        //     app.Run(async context =>
+        //     {
+        //         context.Response.Cookies.Append("name", "adham");
+        //         await context.Response.WriteAsync("Hello from cookie endpoint");
+        //     });
+        // });
+    }
+    
+    public void DependencyRegistry(IServiceCollection services)
+    {
+        // register daos
+        services.AddScoped<IUserDao, UserDao>();
+        
+        // register handlers
+        services.AddScoped<IUserHandler, UserHandler>();
+        services.AddScoped<AuthHandler>();
     }
 }

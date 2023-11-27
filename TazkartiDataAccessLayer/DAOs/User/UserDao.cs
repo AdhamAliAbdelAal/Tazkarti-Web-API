@@ -23,10 +23,23 @@ public class UserDao : IUserDao
         var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Username == username);
         return user;
     }
+    
 
     public async Task<UserDbModel?> GetUserByEmailAddressAsync(string emailAddress)
     {
         var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.EmailAddress == emailAddress);
         return user;
+    }
+
+    public async Task<UserDbModel?> AddUserAsync(UserDbModel user)
+    {
+        var result = await _dbContext.Users.AddAsync(user);
+        await _dbContext.SaveChangesAsync();
+        return result.Entity;
+    }
+    
+    public async Task<bool> IsUserExistsAsync(string username)
+    {
+        return await _dbContext.Users.AnyAsync(user => user.Username == username);
     }
 }

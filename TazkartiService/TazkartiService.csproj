@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="12.0.1" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.24" />
         <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="6.0.24" />
@@ -18,10 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <ProjectReference Include="..\TazkartiBusinessLayer\TazkartiBusinessLayer.csproj" />
       <ProjectReference Include="..\TazkartiDataAccessLayer\TazkartiDataAccessLayer.csproj" />
     </ItemGroup>
 

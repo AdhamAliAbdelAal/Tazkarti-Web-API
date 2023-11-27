@@ -9,4 +9,8 @@ public interface IUserDao
     Task<UserDbModel?> GetUserByUsernameAsync(string username);
     
     Task<UserDbModel?> GetUserByEmailAddressAsync(string emailAddress);
+    
+    Task<UserDbModel?> AddUserAsync(UserDbModel user);
+    
+    Task<bool> IsUserExistsAsync(string username);
 }
