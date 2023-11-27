@@ -38,4 +38,9 @@ public class UserHandler : IUserHandler
         var result = await _userDao.AddUserAsync(user);
         return _mapper.Map<UserModel>(result);
     }
+    
+    public async Task<bool> CheckIfUserExists(string username)
+    {
+        return await _userDao.IsUserExistsAsync(username);
+    }
 }

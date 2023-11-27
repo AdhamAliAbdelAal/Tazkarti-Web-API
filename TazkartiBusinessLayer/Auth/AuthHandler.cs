@@ -51,4 +51,19 @@ public class AuthHandler
         var token = GenerateJwtToken(user);
         return token;
     }
+    
+    public async Task<string> Login(LoginModel data)
+    {
+        var user = await _userHandler.GetUserByUsername(data.Username);
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+        if (user.Password != data.Password)
+        {
+            throw new Exception("Wrong password");
+        }
+        var token = GenerateJwtToken(user);
+        return token;
+    }
 }

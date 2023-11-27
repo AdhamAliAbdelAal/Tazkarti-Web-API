@@ -8,4 +8,6 @@ public interface IUserHandler
     public Task<UserModel> GetUserByEmail(string email);
     
     public Task<UserModel> Register(RegisterModel registerModel);
+    
+    public Task<bool> CheckIfUserExists(string username);
 }

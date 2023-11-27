@@ -11,7 +11,9 @@ public class AuthProfile: Profile
     {
         CreateMap<RegisterDto, RegisterModel>();
         CreateMap<RegisterModel, UserModel>();
-        CreateMap<RegisterModel, UserDbModel>();
+        CreateMap<LoginDto,LoginModel>();
+        CreateMap<LoginModel,UserModel>();
+        
     }
     
 }
