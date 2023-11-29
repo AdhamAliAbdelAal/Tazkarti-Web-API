@@ -22,7 +22,7 @@ public class UserModel
     public string? Address { get; set; }
     
     public string? EmailAddress { get; set; }
-    public Role? Role { get; set; }
+    public Role Role { get; set; }
     
     public UserStatus Status { get; set; }
 }

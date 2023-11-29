@@ -37,8 +37,10 @@ public class Startup
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = false,
-                    ValidateIssuer = false,
+                    ValidateIssuer = true,
+                    // validate issuer signing key 
                     ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
                     ValidAudience = this.Configuration["Authentication:Audience"],
                     ValidIssuer = this.Configuration["Authentication:Issuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.Configuration["Authentication:SecretForKey"]??string.Empty))

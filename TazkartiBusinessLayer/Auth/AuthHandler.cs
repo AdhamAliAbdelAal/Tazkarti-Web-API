@@ -45,23 +45,23 @@ public class AuthHandler
         return tokenString;
     }
     
-    public async Task<string> Register(RegisterModel data)
+    public async Task<string?> Register(RegisterModel data)
     {
         var user = await _userHandler.Register(data);
+        if (user == null)
+        {
+            return null;
+        }
         var token = GenerateJwtToken(user);
         return token;
     }
     
-    public async Task<string> Login(LoginModel data)
+    public async Task<string?> Login(LoginModel data)
     {
         var user = await _userHandler.GetUserByUsername(data.Username);
-        if (user == null)
+        if (user == null||user.Password!=data.Password)
         {
-            throw new Exception("User not found");
-        }
-        if (user.Password != data.Password)
-        {
-            throw new Exception("Wrong password");
+            return null;
         }
         var token = GenerateJwtToken(user);
         return token;

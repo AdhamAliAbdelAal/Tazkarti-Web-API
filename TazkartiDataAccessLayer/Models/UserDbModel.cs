@@ -34,7 +34,7 @@ public class UserDbModel
     
     public string? EmailAddress { get; set; }
     
-    public Role? Role { get; set; }
+    public Role Role { get; set; }
     
     [DefaultValue(UserStatus.Pending)]
     public UserStatus Status { get; set; }

@@ -1,12 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using TazkartiBusinessLayer.Auth;
 using TazkartiBusinessLayer.Handlers;
 using TazkartiBusinessLayer.Models;
+using TazkartiDataAccessLayer.DataTypes;
 using TazkartiService.DTOs;
 
 namespace TazkartiService.Controllers;
@@ -27,9 +24,17 @@ public class AuthController: Controller
     [Route("register")]
     public async Task<ActionResult<RegisterResponseDto>> Register([FromBody] RegisterDto request)
     {
+        if(request.Role == Role.SiteAdministrator)
+        {
+            return BadRequest();
+        }
         var data = _mapper.Map<RegisterModel>(request);
         var token = await _authHandler.Register(data);
-        return Ok(new RegisterResponseDto(token));
+        if(token == null)
+        {
+            return Conflict();
+        }
+        return Created("", new RegisterResponseDto(token));
     }
     
     [HttpPost]
@@ -38,8 +43,10 @@ public class AuthController: Controller
     {
         var data = _mapper.Map<LoginModel>(request);
         var token = await _authHandler.Login(data);
+        if(token == null)
+        {
+            return Unauthorized();
+        }
         return Ok(new LoginResponseDto(token));
     }
-    
-    
 }
