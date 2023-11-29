@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using TazkartiBusinessLayer.Handlers;
@@ -12,11 +13,13 @@ public class AuthHandler
 {
     private readonly IConfiguration _configuration;
     private readonly IUserHandler _userHandler;
+    private readonly PasswordHasherUtility _passwordHasher;
     
-    public AuthHandler(IConfiguration configuration, IUserHandler userHandler)
+    public AuthHandler(IConfiguration configuration, IUserHandler userHandler, PasswordHasherUtility passwordHasher)
     {
         _configuration = configuration;
         _userHandler = userHandler;
+        _passwordHasher = passwordHasher;
     }
     private string GenerateJwtToken(UserModel user)
     {
@@ -47,6 +50,7 @@ public class AuthHandler
     
     public async Task<string?> Register(RegisterModel data)
     {
+        data.Password = _passwordHasher.HashPassword(data.Password);
         var user = await _userHandler.Register(data);
         if (user == null)
         {
@@ -59,7 +63,7 @@ public class AuthHandler
     public async Task<string?> Login(LoginModel data)
     {
         var user = await _userHandler.GetUserByUsername(data.Username);
-        if (user == null||user.Password!=data.Password)
+        if (user == null||_passwordHasher.VerifyPassword(user.Password, data.Password)== PasswordVerificationResult.Failed)
         {
             return null;
         }

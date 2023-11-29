@@ -102,5 +102,8 @@ public class Startup
         // register handlers
         services.AddScoped<IUserHandler, UserHandler>();
         services.AddScoped<AuthHandler>();
+        
+        // password hasher
+        services.AddSingleton<PasswordHasherUtility>();
     }
 }
