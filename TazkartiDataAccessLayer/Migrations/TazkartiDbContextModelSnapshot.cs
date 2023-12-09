@@ -49,7 +49,7 @@ namespace TazkartiDataAccessLayer.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("Role")
+                    b.Property<int>("Role")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
@@ -71,7 +71,9 @@ namespace TazkartiDataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
+                            BirthDate = new DateTime(2023, 12, 9, 16, 2, 55, 352, DateTimeKind.Local).AddTicks(3794),
                             Password = "0111",
+                            Role = 0,
                             Status = 0,
                             Username = "adhoma"
                         });

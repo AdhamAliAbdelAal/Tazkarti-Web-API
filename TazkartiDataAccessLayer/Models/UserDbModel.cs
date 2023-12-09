@@ -24,7 +24,7 @@ public class UserDbModel
     
     public string? LastName { get; set; }
     
-    public DateTime? BirthDate { get; set; }
+    public DateTime? BirthDate { get; set; } = DateTime.Now;
     
     public GenderType? Gender { get; set; }
     
