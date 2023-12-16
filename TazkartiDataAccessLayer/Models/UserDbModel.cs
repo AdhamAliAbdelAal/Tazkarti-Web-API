@@ -37,4 +37,6 @@ public class UserDbModel
     
     public UserStatus Status { get; set; } = UserStatus.Pending;
     
+    public ICollection<SeatDbModel> Seats { get; set; }
+    
 }

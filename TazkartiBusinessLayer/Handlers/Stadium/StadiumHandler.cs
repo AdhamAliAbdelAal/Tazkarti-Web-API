@@ -43,11 +43,6 @@ public class StadiumHandler : IStadiumHandler
         return _mapper.Map<StadiumModel>(result);
     }
     
-    public async Task<bool> IsStadiumExists(string name)
-    {
-        return await _stadiumDao.IsStadiumExistsAsync(name);
-    }
-    
     public async Task<IEnumerable<StadiumModel>> GetStadiums(int page, int limit)
     {
         var stadiums = await _stadiumDao.GetStadiums(page, limit);

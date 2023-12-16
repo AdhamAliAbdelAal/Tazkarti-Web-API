@@ -10,7 +10,7 @@ public class MatchDbModel
     public int Id { get; set; }
     
     [Required]
-    public StadiumDbModel Stadium { get; set; }
+    public int StadiumId { get; set; }
     
     [Required]
     public DateTime Date { get; set; }
@@ -18,8 +18,12 @@ public class MatchDbModel
     [Required]
     public TeamDbModel HomeTeam { get; set; }
     
+    public int HomeTeamId { get; set; }
+    
     [Required]
     public TeamDbModel AwayTeam { get; set; }
+    
+    public int AwayTeamId { get; set; }
     
     [Required]
     public string Referee { get; set; }
@@ -30,4 +34,5 @@ public class MatchDbModel
     [Required]
     public string Linesmen2 { get; set; }
     
+    public ICollection<SeatDbModel> Seats { get; set; }
 }

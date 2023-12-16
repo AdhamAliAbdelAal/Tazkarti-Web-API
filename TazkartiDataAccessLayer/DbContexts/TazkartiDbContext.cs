@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection.Emit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using TazkartiDataAccessLayer.DataTypes;
 using TazkartiDataAccessLayer.Models;
@@ -17,6 +18,7 @@ public class TazkartiDbContext : DbContext
     public DbSet<MatchDbModel> Matches { get; set; }
     public DbSet<StadiumDbModel> Stadiums { get; set; }
     public DbSet<TeamDbModel> Teams { get; set; }
+    public DbSet<SeatDbModel> Seats { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -146,6 +148,24 @@ public class TazkartiDbContext : DbContext
                 Name = "Saramika Celiopatra",
             }
         );
+        // each user cannot reserve more than one seat for a match
+        modelBuilder.Entity<SeatDbModel>()
+            .HasIndex(s => new {s.MatchId, s.UserId})
+            .IsUnique();
+        // each seat cannot be duplicated for a match
+        modelBuilder.Entity<SeatDbModel>()
+            .HasKey(s => new { s.MatchId, s.Number });
+        
+        //  map unconventionally named foreign keys
+        modelBuilder.Entity<MatchDbModel>()
+            .HasOne<TeamDbModel>(m => m.HomeTeam)
+            .WithMany(t => t.HomeMatches)
+            .HasForeignKey(m => m.HomeTeamId);
+        
+        modelBuilder.Entity<MatchDbModel>()
+            .HasOne<TeamDbModel>(m => m.AwayTeam)
+            .WithMany(t => t.AwayMatches)
+            .HasForeignKey(m => m.AwayTeamId);
         
         
         base.OnModelCreating(modelBuilder);

@@ -18,4 +18,6 @@ public class StadiumDbModel
     
     [Required]
     public int VIPLength { get; set; }
+    
+    List<MatchDbModel> Matches { get; set; }
 }

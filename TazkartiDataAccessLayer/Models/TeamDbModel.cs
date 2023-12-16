@@ -11,5 +11,9 @@ public class TeamDbModel
     
     [Required]
     [MaxLength(50)]
-    public string Name { get; set; } = null!;
+    public string Name { get; set; }
+    
+    public List<MatchDbModel> HomeMatches { get; set; }
+    
+    public List<MatchDbModel> AwayMatches { get; set; }
 }
