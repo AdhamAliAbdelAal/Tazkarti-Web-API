@@ -36,7 +36,6 @@ public class UserDbModel
     
     public Role Role { get; set; }
     
-    [DefaultValue(UserStatus.Pending)]
-    public UserStatus Status { get; set; }
+    public UserStatus Status { get; set; } = UserStatus.Pending;
     
 }
