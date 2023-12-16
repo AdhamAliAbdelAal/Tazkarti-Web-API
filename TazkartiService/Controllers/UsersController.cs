@@ -48,7 +48,6 @@ public class UsersController : Controller
     
     [HttpGet]
     [Route("{username}")]
-    [Authorize(Roles= Roles.SiteAdministrator)]
     public async Task<ActionResult> Get([FromRoute] string username)
     {
         var user = await _userHandler.GetUserByUsername(username);

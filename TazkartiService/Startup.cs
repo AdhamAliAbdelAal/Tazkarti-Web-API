@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using TazkartiBusinessLayer.Auth;
 using TazkartiBusinessLayer.Handlers;
 using TazkartiDataAccessLayer.DAOs;
+using TazkartiDataAccessLayer.DAOs.Stadium;
 using TazkartiDataAccessLayer.DbContexts;
 
 namespace TazkartiService;
@@ -103,9 +104,11 @@ public class Startup
     {
         // register daos
         services.AddScoped<IUserDao, UserDao>();
+        services.AddScoped<IStadiumDao, StadiumDao>();
         
         // register handlers
         services.AddScoped<IUserHandler, UserHandler>();
+        services.AddScoped<IStadiumHandler, StadiumHandler>();
         services.AddScoped<AuthHandler>();
         
         // password hasher
