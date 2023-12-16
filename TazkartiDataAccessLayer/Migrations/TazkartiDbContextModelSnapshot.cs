@@ -65,17 +65,17 @@ namespace TazkartiDataAccessLayer.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            BirthDate = new DateTime(2023, 12, 9, 16, 2, 55, 352, DateTimeKind.Local).AddTicks(3794),
-                            Password = "0111",
+                            BirthDate = new DateTime(2023, 12, 16, 15, 26, 36, 547, DateTimeKind.Local).AddTicks(603),
+                            Password = "AQAAAAEAACcQAAAAEOYxMlMfiyJz1mbgW81M0ap6FdaEYndumqz4pESkwohGdesy/P4V9yQzcKiuzdBgqA==",
                             Role = 0,
                             Status = 0,
-                            Username = "adhoma"
+                            Username = "adhamali"
                         });
                 });
 #pragma warning restore 612, 618

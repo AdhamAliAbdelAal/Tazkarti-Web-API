@@ -40,7 +40,7 @@ public class UsersController : Controller
 
     [HttpGet]
     [Authorize(Roles= Roles.SiteAdministrator)]
-    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers([FromQuery] int page, [FromQuery] int limit)
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers([FromQuery] int page = 0, [FromQuery] int limit = 10)
     {
         var users = await _userHandler.GetUsers(page, limit);
         return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
@@ -48,6 +48,7 @@ public class UsersController : Controller
     
     [HttpGet]
     [Route("{username}")]
+    [Authorize(Roles= Roles.SiteAdministrator)]
     public async Task<ActionResult> Get([FromRoute] string username)
     {
         var user = await _userHandler.GetUserByUsername(username);

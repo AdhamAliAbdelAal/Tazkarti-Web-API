@@ -11,8 +11,8 @@ using TazkartiDataAccessLayer.DbContexts;
 namespace TazkartiDataAccessLayer.Migrations
 {
     [DbContext(typeof(TazkartiDbContext))]
-    [Migration("20231127153857_seed")]
-    partial class seed
+    [Migration("20231216132636_initial_migration")]
+    partial class initial_migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -51,7 +51,7 @@ namespace TazkartiDataAccessLayer.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("Role")
+                    b.Property<int>("Role")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
@@ -73,9 +73,11 @@ namespace TazkartiDataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
-                            Password = "0111",
+                            BirthDate = new DateTime(2023, 12, 16, 15, 26, 36, 547, DateTimeKind.Local).AddTicks(603),
+                            Password = "AQAAAAEAACcQAAAAEOYxMlMfiyJz1mbgW81M0ap6FdaEYndumqz4pESkwohGdesy/P4V9yQzcKiuzdBgqA==",
+                            Role = 0,
                             Status = 0,
-                            Username = "adhoma"
+                            Username = "adhamali"
                         });
                 });
 #pragma warning restore 612, 618

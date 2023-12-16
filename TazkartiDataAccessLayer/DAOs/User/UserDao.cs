@@ -55,6 +55,7 @@ public class UserDao : IUserDao
     {
         int skip = (page - 1) * limit;
         var users = await _dbContext.Users
+            .Where(u => u.Role != Role.SiteAdministrator)
             .Skip(skip)
             .Take(limit)
             .ToListAsync();

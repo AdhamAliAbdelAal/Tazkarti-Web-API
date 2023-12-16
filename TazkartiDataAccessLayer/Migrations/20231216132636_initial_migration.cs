@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TazkartiDataAccessLayer.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial_migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,13 +24,18 @@ namespace TazkartiDataAccessLayer.Migrations
                     City = table.Column<string>(type: "TEXT", nullable: true),
                     Address = table.Column<string>(type: "TEXT", nullable: true),
                     EmailAddress = table.Column<string>(type: "TEXT", nullable: true),
-                    Role = table.Column<int>(type: "INTEGER", nullable: true),
+                    Role = table.Column<int>(type: "INTEGER", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Address", "BirthDate", "City", "EmailAddress", "FirstName", "Gender", "LastName", "Password", "Role", "Status", "Username" },
+                values: new object[] { 1, null, new DateTime(2023, 12, 16, 15, 26, 36, 547, DateTimeKind.Local).AddTicks(603), null, null, null, null, null, "AQAAAAEAACcQAAAAEOYxMlMfiyJz1mbgW81M0ap6FdaEYndumqz4pESkwohGdesy/P4V9yQzcKiuzdBgqA==", 0, 0, "adhamali" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Username",

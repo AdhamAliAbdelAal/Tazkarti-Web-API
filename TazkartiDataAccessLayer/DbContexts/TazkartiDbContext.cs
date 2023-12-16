@@ -32,10 +32,11 @@ public class TazkartiDbContext : DbContext
         modelBuilder.Entity<UserDbModel>().HasData(
             new UserDbModel()
             {
-                Id = 1,
-                Username = "adhoma",
-                Password = "0111",
+                Id = 2,
+                Username = "adhamali",
+                Password = "AQAAAAEAACcQAAAAEOYxMlMfiyJz1mbgW81M0ap6FdaEYndumqz4pESkwohGdesy/P4V9yQzcKiuzdBgqA==",
                 Status = UserStatus.Approved,
+                Role = Role.SiteAdministrator,
             }
         );
         

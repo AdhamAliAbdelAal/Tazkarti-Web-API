@@ -13,13 +13,11 @@ public class AuthHandler
 {
     private readonly IConfiguration _configuration;
     private readonly IUserHandler _userHandler;
-    private readonly PasswordHasherUtility _passwordHasher;
     
-    public AuthHandler(IConfiguration configuration, IUserHandler userHandler, PasswordHasherUtility passwordHasher)
+    public AuthHandler(IConfiguration configuration, IUserHandler userHandler)
     {
         _configuration = configuration;
         _userHandler = userHandler;
-        _passwordHasher = passwordHasher;
     }
     private string GenerateJwtToken(UserModel user)
     {
@@ -50,7 +48,7 @@ public class AuthHandler
     
     public async Task<string?> Register(RegisterModel data)
     {
-        data.Password = _passwordHasher.HashPassword(data.Password);
+        data.Password = PasswordHasherUtility.HashPassword(data.Password);
         var user = await _userHandler.Register(data);
         if (user == null)
         {
@@ -63,7 +61,7 @@ public class AuthHandler
     public async Task<string?> Login(LoginModel data)
     {
         var user = await _userHandler.GetUserByUsername(data.Username);
-        if (user == null||_passwordHasher.VerifyPassword(user.Password, data.Password)== PasswordVerificationResult.Failed)
+        if (user == null||PasswordHasherUtility.VerifyPassword(user.Password, data.Password)== PasswordVerificationResult.Failed)
         {
             return null;
         }

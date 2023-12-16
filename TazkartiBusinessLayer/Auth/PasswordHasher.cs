@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 public class PasswordHasherUtility
 {
-    public string HashPassword(string password)
+    public static string HashPassword(string password)
     {
         var passwordHasher = new PasswordHasher<object>(); // You can replace 'object' with your user type if you have a custom user class
 
@@ -16,7 +16,7 @@ public class PasswordHasherUtility
         return hashedPassword;
     }
 
-    public PasswordVerificationResult VerifyPassword(string hashedPassword, string providedPassword)
+    public static PasswordVerificationResult VerifyPassword(string hashedPassword, string providedPassword)
     {
         var passwordHasher = new PasswordHasher<object>(); // You can replace 'object' with your user type if you have a custom user class
 
