@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using TazkartiBusinessLayer.Models;
 using TazkartiDataAccessLayer.DAOs;
+using TazkartiDataAccessLayer.DataTypes;
 using TazkartiDataAccessLayer.Models;
 
 namespace TazkartiBusinessLayer.Handlers;
@@ -46,5 +47,28 @@ public class UserHandler : IUserHandler
     public async Task<bool> CheckIfUserExists(string username)
     {
         return await _userDao.IsUserExistsAsync(username);
+    }
+    
+    public async Task<bool> DeleteUser(string username)
+    {
+        return await _userDao.DeleteUserAsync(username);
+    }
+    
+    public async Task<bool> ApproveUser(string username)
+    {
+        var user = await _userDao.GetUserByUsernameAsync(username);
+        if (user == null)
+        {
+            return false;
+        }
+        user.Status = UserStatus.Approved;
+        int updates = await _userDao.SaveChanges();
+        return updates == 1;
+    }
+
+    public async Task<IEnumerable<UserModel>> GetUsers(int page, int limit)
+    {
+        var users = await _userDao.GetUsers(page, limit);
+        return _mapper.Map<IEnumerable<UserModel>>(users);
     }
 }

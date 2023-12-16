@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TazkartiDataAccessLayer.DataTypes;
 using TazkartiDataAccessLayer.DbContexts;
 using TazkartiDataAccessLayer.Models;
 
@@ -35,5 +36,33 @@ public class UserDao : IUserDao
     public async Task<bool> IsUserExistsAsync(string username)
     {
         return await _dbContext.Users.AnyAsync(user => user.Username == username);
+    }
+    
+    public async Task<bool> DeleteUserAsync(string username)
+    {
+        var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Username == username);
+        if (user == null)
+        {
+            return false;
+        }
+        _dbContext.Users.Remove(user);
+        await _dbContext.SaveChangesAsync();
+        return true;
+    }
+    
+
+    public async Task<IEnumerable<UserDbModel>> GetUsers(int page, int limit)
+    {
+        int skip = (page - 1) * limit;
+        var users = await _dbContext.Users
+            .Skip(skip)
+            .Take(limit)
+            .ToListAsync();
+        return users;
+    }
+
+    public async Task<int> SaveChanges()
+    {
+        return await _dbContext.SaveChangesAsync();
     }
 }

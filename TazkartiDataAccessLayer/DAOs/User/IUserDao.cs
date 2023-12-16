@@ -11,4 +11,10 @@ public interface IUserDao
     Task<UserDbModel?> AddUserAsync(UserDbModel user);
     
     Task<bool> IsUserExistsAsync(string username);
+    
+    Task<bool> DeleteUserAsync(string username);
+
+    Task<IEnumerable<UserDbModel>> GetUsers(int page, int limit);
+
+    Task<int> SaveChanges();
 }

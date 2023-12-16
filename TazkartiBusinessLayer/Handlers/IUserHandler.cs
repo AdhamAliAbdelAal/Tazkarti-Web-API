@@ -10,4 +10,10 @@ public interface IUserHandler
     public Task<UserModel?> Register(RegisterModel registerModel);
     
     public Task<bool> CheckIfUserExists(string username);
+    
+    public Task<bool> DeleteUser(string username);
+    
+    public Task<bool> ApproveUser(string username);
+
+    public Task<IEnumerable<UserModel>> GetUsers(int page, int limit);
 }
