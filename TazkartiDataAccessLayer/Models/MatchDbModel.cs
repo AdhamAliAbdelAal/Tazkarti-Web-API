@@ -34,5 +34,5 @@ public class MatchDbModel
     [Required]
     public string Linesmen2 { get; set; }
     
-    public ICollection<SeatDbModel> Seats { get; set; }
+    public List<SeatDbModel> Seats { get; set; }
 }

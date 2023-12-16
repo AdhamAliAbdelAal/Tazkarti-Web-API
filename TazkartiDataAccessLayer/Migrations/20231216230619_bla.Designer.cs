@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TazkartiDataAccessLayer.DbContexts;
 
@@ -10,9 +11,10 @@ using TazkartiDataAccessLayer.DbContexts;
 namespace TazkartiDataAccessLayer.Migrations
 {
     [DbContext(typeof(TazkartiDbContext))]
-    partial class TazkartiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231216230619_bla")]
+    partial class bla
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.24");
@@ -53,8 +55,6 @@ namespace TazkartiDataAccessLayer.Migrations
 
                     b.HasIndex("HomeTeamId");
 
-                    b.HasIndex("StadiumId");
-
                     b.ToTable("Matches");
                 });
 
@@ -66,15 +66,23 @@ namespace TazkartiDataAccessLayer.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("MatchDbModelId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("ReservedAt")
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("UserDbModelId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("MatchId", "Number");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("MatchDbModelId");
+
+                    b.HasIndex("UserDbModelId");
 
                     b.HasIndex("MatchId", "UserId")
                         .IsUnique();
@@ -274,7 +282,7 @@ namespace TazkartiDataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
-                            BirthDate = new DateTime(2023, 12, 17, 1, 47, 24, 528, DateTimeKind.Local).AddTicks(9398),
+                            BirthDate = new DateTime(2023, 12, 17, 1, 6, 19, 456, DateTimeKind.Local).AddTicks(5882),
                             Password = "AQAAAAEAACcQAAAAEOYxMlMfiyJz1mbgW81M0ap6FdaEYndumqz4pESkwohGdesy/P4V9yQzcKiuzdBgqA==",
                             Role = 0,
                             Status = 0,
@@ -296,12 +304,6 @@ namespace TazkartiDataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TazkartiDataAccessLayer.Models.StadiumDbModel", null)
-                        .WithMany("Matches")
-                        .HasForeignKey("StadiumId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("AwayTeam");
 
                     b.Navigation("HomeTeam");
@@ -309,31 +311,18 @@ namespace TazkartiDataAccessLayer.Migrations
 
             modelBuilder.Entity("TazkartiDataAccessLayer.Models.SeatDbModel", b =>
                 {
-                    b.HasOne("TazkartiDataAccessLayer.Models.MatchDbModel", "Match")
+                    b.HasOne("TazkartiDataAccessLayer.Models.MatchDbModel", null)
                         .WithMany("Seats")
-                        .HasForeignKey("MatchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MatchDbModelId");
 
-                    b.HasOne("TazkartiDataAccessLayer.Models.UserDbModel", "User")
+                    b.HasOne("TazkartiDataAccessLayer.Models.UserDbModel", null)
                         .WithMany("Seats")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Match");
-
-                    b.Navigation("User");
+                        .HasForeignKey("UserDbModelId");
                 });
 
             modelBuilder.Entity("TazkartiDataAccessLayer.Models.MatchDbModel", b =>
                 {
                     b.Navigation("Seats");
-                });
-
-            modelBuilder.Entity("TazkartiDataAccessLayer.Models.StadiumDbModel", b =>
-                {
-                    b.Navigation("Matches");
                 });
 
             modelBuilder.Entity("TazkartiDataAccessLayer.Models.TeamDbModel", b =>

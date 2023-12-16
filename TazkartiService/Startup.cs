@@ -4,7 +4,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TazkartiBusinessLayer.Auth;
 using TazkartiBusinessLayer.Handlers;
+using TazkartiBusinessLayer.Handlers.Match;
 using TazkartiDataAccessLayer.DAOs;
+using TazkartiDataAccessLayer.DAOs.Match;
 using TazkartiDataAccessLayer.DAOs.Stadium;
 using TazkartiDataAccessLayer.DbContexts;
 
@@ -105,10 +107,12 @@ public class Startup
         // register daos
         services.AddScoped<IUserDao, UserDao>();
         services.AddScoped<IStadiumDao, StadiumDao>();
+        services.AddScoped<IMatchDao, MatchDao>();
         
         // register handlers
         services.AddScoped<IUserHandler, UserHandler>();
         services.AddScoped<IStadiumHandler, StadiumHandler>();
+        services.AddScoped<IMatchHandler, MatchHandler>();
         services.AddScoped<AuthHandler>();
         
         // password hasher

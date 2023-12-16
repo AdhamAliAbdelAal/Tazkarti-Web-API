@@ -11,8 +11,12 @@ public class SeatDbModel
     [Required]
     public int UserId { get; set; }
     
+    public UserDbModel User { get; set; }
+    
     [Required]
     public int MatchId { get; set; }
+    
+    public MatchDbModel Match { get; set; }
     
     public DateTime ReservedAt { get; set; } = DateTime.Now;
     

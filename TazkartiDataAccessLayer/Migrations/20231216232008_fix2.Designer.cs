@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TazkartiDataAccessLayer.DbContexts;
 
@@ -10,9 +11,10 @@ using TazkartiDataAccessLayer.DbContexts;
 namespace TazkartiDataAccessLayer.Migrations
 {
     [DbContext(typeof(TazkartiDbContext))]
-    partial class TazkartiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231216232008_fix2")]
+    partial class fix2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.24");
@@ -52,8 +54,6 @@ namespace TazkartiDataAccessLayer.Migrations
                     b.HasIndex("AwayTeamId");
 
                     b.HasIndex("HomeTeamId");
-
-                    b.HasIndex("StadiumId");
 
                     b.ToTable("Matches");
                 });
@@ -274,7 +274,7 @@ namespace TazkartiDataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
-                            BirthDate = new DateTime(2023, 12, 17, 1, 47, 24, 528, DateTimeKind.Local).AddTicks(9398),
+                            BirthDate = new DateTime(2023, 12, 17, 1, 20, 8, 108, DateTimeKind.Local).AddTicks(2965),
                             Password = "AQAAAAEAACcQAAAAEOYxMlMfiyJz1mbgW81M0ap6FdaEYndumqz4pESkwohGdesy/P4V9yQzcKiuzdBgqA==",
                             Role = 0,
                             Status = 0,
@@ -293,12 +293,6 @@ namespace TazkartiDataAccessLayer.Migrations
                     b.HasOne("TazkartiDataAccessLayer.Models.TeamDbModel", "HomeTeam")
                         .WithMany("HomeMatches")
                         .HasForeignKey("HomeTeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TazkartiDataAccessLayer.Models.StadiumDbModel", null)
-                        .WithMany("Matches")
-                        .HasForeignKey("StadiumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -329,11 +323,6 @@ namespace TazkartiDataAccessLayer.Migrations
             modelBuilder.Entity("TazkartiDataAccessLayer.Models.MatchDbModel", b =>
                 {
                     b.Navigation("Seats");
-                });
-
-            modelBuilder.Entity("TazkartiDataAccessLayer.Models.StadiumDbModel", b =>
-                {
-                    b.Navigation("Matches");
                 });
 
             modelBuilder.Entity("TazkartiDataAccessLayer.Models.TeamDbModel", b =>

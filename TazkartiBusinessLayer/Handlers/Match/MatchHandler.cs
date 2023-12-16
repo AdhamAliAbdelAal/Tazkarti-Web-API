@@ -30,7 +30,15 @@ public class MatchHandler : IMatchHandler
     public async Task<MatchModel?> AddMatch(MatchModel match)
     {
         var matchDbModel = _mapper.Map<MatchDbModel>(match);
-        var result = await _matchDao.AddMatchAsync(matchDbModel);
+        MatchDbModel? result = null;
+        try
+        {
+            result = await _matchDao.AddMatchAsync(matchDbModel);
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
         return _mapper.Map<MatchModel>(result);
     }
 

@@ -2,11 +2,8 @@
 
 namespace TazkartiService.DTOs;
 
-public class MatchDto
+public class AddMatchDto
 {
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
-    
     [JsonPropertyName("stadiumId")]
     public int StadiumId { get; set; }
     
@@ -27,7 +24,4 @@ public class MatchDto
     
     [JsonPropertyName("linesmen2")]
     public string Linesmen2 { get; set; }
-    
-    [JsonPropertyName("seats")]
-    public IEnumerable<SeatDto> Seats { get; set; }
 }

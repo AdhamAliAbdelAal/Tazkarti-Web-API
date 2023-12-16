@@ -11,6 +11,8 @@ public class MatchProfile: Profile
     {
         CreateMap<MatchModel, MatchDbModel>();
         CreateMap<MatchDbModel, MatchModel>();
+        CreateMap<MatchModel, AddMatchDto>();
+        CreateMap<AddMatchDto, MatchModel>();
         CreateMap<MatchModel, MatchDto>();
         CreateMap<MatchDto, MatchModel>();
     }
