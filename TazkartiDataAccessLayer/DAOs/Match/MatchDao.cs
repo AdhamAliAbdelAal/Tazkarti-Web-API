@@ -30,7 +30,7 @@ public class MatchDao : IMatchDao
     {
         var matchEntry = await _context.Matches.AddAsync(match);
         await _context.SaveChangesAsync();
-        return matchEntry.Entity;
+        return await GetMatchByIdAsync(matchEntry.Entity.Id);
     }
 
     public async Task<bool> IsMatchExistsAsync(int id)

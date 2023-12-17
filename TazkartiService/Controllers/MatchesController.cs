@@ -44,10 +44,28 @@ public class MatchesController: Controller
     [Authorize(Policy = "MustBeApprovedEFAManager")]
     public async Task<ActionResult<MatchDto>> AddMatch(AddMatchDto addMatch)
     {
-        var matchModel = _mapper.Map<MatchModel>(addMatch);
-        var result = await _matchHandler.AddMatch(matchModel);
-
-        return result != null ? Ok(_mapper.Map<MatchDto>(result)) : BadRequest();
+        try
+        {
+            var matchModel = _mapper.Map<MatchModel>(addMatch);
+            var result = await _matchHandler.AddMatch(matchModel);
+            return Ok(_mapper.Map<MatchDto>(result));
+        }
+        catch (MatchDateInPastException e)
+        {
+            return BadRequest(new {message = e.Message});
+        }
+        catch (MatchInSameStadiumInSameDateException e)
+        {
+            return Conflict(new {message = e.Message});
+        }
+        catch (StadiumNotFoundException e)
+        {
+            return NotFound(new {message = e.Message});
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, new {message = e.Message});
+        }
     }
     
     [HttpPost]

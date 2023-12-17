@@ -3,6 +3,7 @@ using TazkartiBusinessLayer.Exceptions;
 using TazkartiBusinessLayer.Models;
 using TazkartiDataAccessLayer.DAOs.Match;
 using TazkartiDataAccessLayer.DAOs.Seat;
+using TazkartiDataAccessLayer.DAOs.Stadium;
 using TazkartiDataAccessLayer.Models;
 
 namespace TazkartiBusinessLayer.Handlers.Match;
@@ -12,12 +13,14 @@ public class MatchHandler : IMatchHandler
     private readonly IMatchDao _matchDao;
     private readonly ISeatDao _seatDao;
     private readonly IMapper _mapper;
+    private readonly IStadiumDao _stadiumDao;
     
-    public MatchHandler(IMatchDao matchDao, ISeatDao seatDao, IMapper mapper)
+    public MatchHandler(IMatchDao matchDao, ISeatDao seatDao, IMapper mapper, IStadiumDao stadiumDao)
     {
         _matchDao = matchDao;
         _seatDao = seatDao;
         _mapper = mapper;
+        _stadiumDao = stadiumDao;
     }
 
 
@@ -33,17 +36,34 @@ public class MatchHandler : IMatchHandler
 
     public async Task<MatchModel?> AddMatch(MatchModel match)
     {
+        // check that the match date is not in the past
+        if (match.Date < DateTime.Now)
+            throw new MatchDateInPastException();
+        // check that the match is not be played in the stadium that will be played in the same date but with tolerance of 3 hours after and before
+        var stadium = await _stadiumDao.GetStadiumByIdAsync(match.StadiumId, true);
+        if (stadium == null)
+            throw new StadiumNotFoundException(match.StadiumId);
+        
+        var matches = stadium.Matches;
+        foreach (var m in matches)
+        {
+            if (m.Date.AddHours(4) > match.Date && m.Date.AddHours(-4) < match.Date)
+                throw new MatchInSameStadiumInSameDateException();
+        }
+        
         var matchDbModel = _mapper.Map<MatchDbModel>(match);
-        MatchDbModel? result = null;
         try
         {
-            result = await _matchDao.AddMatchAsync(matchDbModel);
+            var result = await _matchDao.AddMatchAsync(matchDbModel);
+            return _mapper.Map<MatchModel>(result);
         }
         catch (Exception e)
         {
-            return null;
+            //check constraint exception
+            if(e.InnerException.Message.Contains("CHECK constraint"))
+                throw new SameHomeAndAwayTeamException();
+            throw new Exception("Invalid match data");
         }
-        return _mapper.Map<MatchModel>(result);
     }
 
     public async Task<IEnumerable<MatchModel>> GetMatches(int page, int limit)

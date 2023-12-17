@@ -13,6 +13,14 @@ public class StadiumDao : IStadiumDao
         _context = context;
     }
 
+    public async Task<StadiumDbModel?> GetStadiumByIdAsync(int id, bool includeMatches = false)
+    {
+        var query = _context.Stadiums.AsQueryable();
+        if (includeMatches)
+            query = query.Include(s => s.Matches);
+        return await query.FirstOrDefaultAsync(s => s.Id == id);
+    }
+
     public async Task<StadiumDbModel?> GetStadiumByNameAsync(string name)
     {
         return await _context.Stadiums

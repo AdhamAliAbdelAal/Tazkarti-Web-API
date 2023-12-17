@@ -4,6 +4,7 @@ namespace TazkartiDataAccessLayer.DAOs.Stadium;
 
 public interface IStadiumDao
 {
+    Task<StadiumDbModel?> GetStadiumByIdAsync(int id, bool includeMatches = false);
     Task<StadiumDbModel?> GetStadiumByNameAsync(string name);
     
     Task<StadiumDbModel?> AddStadiumAsync(StadiumDbModel stadium);
