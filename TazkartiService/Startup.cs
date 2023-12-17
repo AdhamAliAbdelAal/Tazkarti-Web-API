@@ -7,7 +7,9 @@ using TazkartiBusinessLayer.Handlers;
 using TazkartiBusinessLayer.Handlers.Match;
 using TazkartiDataAccessLayer.DAOs;
 using TazkartiDataAccessLayer.DAOs.Match;
+using TazkartiDataAccessLayer.DAOs.Seat;
 using TazkartiDataAccessLayer.DAOs.Stadium;
+using TazkartiDataAccessLayer.DataTypes;
 using TazkartiDataAccessLayer.DbContexts;
 
 namespace TazkartiService;
@@ -52,11 +54,11 @@ public class Startup
 
         services.AddAuthorization(options =>
         {
-            options.AddPolicy("MustBeAdham", policy =>
+            options.AddPolicy("MustBeApprovedFan", policy =>
             {
                 policy.RequireAuthenticatedUser();
-                // add policy to check if the sub claim is equal to adham
-                policy.RequireClaim("name", "adham");
+                policy.RequireRole(Roles.Fan);
+                policy.RequireClaim("status", UserStatus.Approved.ToString());
             });
         });
         
@@ -108,6 +110,7 @@ public class Startup
         services.AddScoped<IUserDao, UserDao>();
         services.AddScoped<IStadiumDao, StadiumDao>();
         services.AddScoped<IMatchDao, MatchDao>();
+        services.AddScoped<ISeatDao, SeatDao>();
         
         // register handlers
         services.AddScoped<IUserHandler, UserHandler>();

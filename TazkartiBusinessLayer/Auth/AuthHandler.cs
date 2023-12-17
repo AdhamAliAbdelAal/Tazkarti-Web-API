@@ -33,6 +33,12 @@ public class AuthHandler
             
             new Claim("username", user.Username),
             
+            // add status claim based on the user status
+            new Claim("status", user.Status.ToString()),
+            
+            // add id claim based on the user id
+            new Claim("id", user.Id.ToString()),
+            
         };
         var token = new JwtSecurityToken(
             _configuration["Authentication:Issuer"],

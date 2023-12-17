@@ -9,4 +9,8 @@ public interface IMatchHandler
     public Task<MatchModel?> AddMatch(MatchModel match);
     
     public Task<IEnumerable<MatchModel>> GetMatches(int page, int limit);
+    
+    public Task<bool> IsMatchExists(int id);
+    
+    public Task<SeatModel?> ReserveSeat(int matchId, int userId,int seatNumber);
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using TazkartiBusinessLayer.Models;
 using TazkartiDataAccessLayer.DAOs.Match;
+using TazkartiDataAccessLayer.DAOs.Seat;
 using TazkartiDataAccessLayer.Models;
 
 namespace TazkartiBusinessLayer.Handlers.Match;
@@ -8,11 +9,13 @@ namespace TazkartiBusinessLayer.Handlers.Match;
 public class MatchHandler : IMatchHandler
 {
     private readonly IMatchDao _matchDao;
+    private readonly ISeatDao _seatDao;
     private readonly IMapper _mapper;
     
-    public MatchHandler(IMatchDao matchDao, IMapper mapper)
+    public MatchHandler(IMatchDao matchDao, ISeatDao seatDao, IMapper mapper)
     {
         _matchDao = matchDao;
+        _seatDao = seatDao;
         _mapper = mapper;
     }
 
@@ -46,5 +49,32 @@ public class MatchHandler : IMatchHandler
     {
         var matches = await _matchDao.GetMatches(page, limit);
         return _mapper.Map<IEnumerable<MatchModel>>(matches);
+    }
+    
+    public async Task<bool> IsMatchExists(int id)
+    {
+        return await _matchDao.IsMatchExistsAsync(id);
+    }
+
+    public async Task<SeatModel?> ReserveSeat(int matchId, int userId, int seatNumber)
+    {
+        var seat = new SeatModel()
+        {
+            MatchId = matchId,
+            UserId = userId,
+            Number = seatNumber,
+            ReservedAt = DateTime.Now
+        };
+        var seatDbModel = _mapper.Map<SeatDbModel>(seat);
+        try
+        {
+            var result = await _seatDao.AddSeatAsync(seatDbModel);
+            var reservedSeat = _mapper.Map<SeatModel>(result);
+            return reservedSeat;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
     }
 }

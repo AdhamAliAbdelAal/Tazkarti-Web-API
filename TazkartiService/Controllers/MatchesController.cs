@@ -48,4 +48,23 @@ public class MatchesController: Controller
 
         return result != null ? Ok(_mapper.Map<MatchDto>(result)) : BadRequest();
     }
+    
+    [HttpPost]
+    [Route("{id}/{seatNumber}")]
+    [Authorize(Policy = "MustBeApprovedFan")]
+    public async Task<ActionResult<SeatDto>> ReserveSeat(int id, int seatNumber)
+    {
+        if(!await _matchHandler.IsMatchExists(id))
+        {
+            return NotFound();
+        }
+        var userId =  int.Parse(User.Claims.FirstOrDefault(c => c.Type == "id")?.Value);
+        
+        var result = await _matchHandler.ReserveSeat(id, userId, seatNumber);
+        if (result == null)
+        {
+            return Conflict();
+        }
+        return Ok(_mapper.Map<SeatDto>(result));
+    }
 }
