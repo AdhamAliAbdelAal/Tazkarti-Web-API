@@ -56,6 +56,8 @@ namespace TazkartiDataAccessLayer.Migrations
                     b.HasIndex("StadiumId");
 
                     b.ToTable("Matches");
+
+                    b.HasCheckConstraint("CK_Match_Team", "HomeTeamId <> AwayTeamId");
                 });
 
             modelBuilder.Entity("TazkartiDataAccessLayer.Models.SeatDbModel", b =>
@@ -274,7 +276,7 @@ namespace TazkartiDataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
-                            BirthDate = new DateTime(2023, 12, 17, 1, 47, 24, 528, DateTimeKind.Local).AddTicks(9398),
+                            BirthDate = new DateTime(2023, 12, 17, 12, 51, 10, 80, DateTimeKind.Local).AddTicks(7811),
                             Password = "AQAAAAEAACcQAAAAEOYxMlMfiyJz1mbgW81M0ap6FdaEYndumqz4pESkwohGdesy/P4V9yQzcKiuzdBgqA==",
                             Role = 0,
                             Status = 0,

@@ -40,7 +40,7 @@ public class MatchesController: Controller
     }
     
     [HttpPost]
-    [Authorize(Roles = Roles.EFAManager)]
+    [Authorize(Policy = "MustBeApprovedEFAManager")]
     public async Task<ActionResult<MatchDto>> AddMatch(AddMatchDto addMatch)
     {
         var matchModel = _mapper.Map<MatchModel>(addMatch);
@@ -56,14 +56,22 @@ public class MatchesController: Controller
     {
         if(!await _matchHandler.IsMatchExists(id))
         {
-            return NotFound();
+            return NotFound("Match is not found");
         }
         var userId =  int.Parse(User.Claims.FirstOrDefault(c => c.Type == "id")?.Value);
-        
-        var result = await _matchHandler.ReserveSeat(id, userId, seatNumber);
-        if (result == null)
+        SeatModel? result = null;
+        try
         {
-            return Conflict();
+            result = await _matchHandler.ReserveSeat(id, userId, seatNumber);
+            if (result == null)
+            {
+                return Conflict("Seat is already reserved or user already reserved a seat in this match");
+            }
+        }
+        catch (Exception e)
+        {
+            // seat not found
+            return NotFound("Seat is not found");
         }
         return Ok(_mapper.Map<SeatDto>(result));
     }

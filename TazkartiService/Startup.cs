@@ -60,6 +60,12 @@ public class Startup
                 policy.RequireRole(Roles.Fan);
                 policy.RequireClaim("status", UserStatus.Approved.ToString());
             });
+            options.AddPolicy("MustBeApprovedEFAManager", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.RequireRole(Roles.EFAManager);
+                policy.RequireClaim("status", UserStatus.Approved.ToString());
+            });
         });
         
         this.DependencyRegistry(services);
@@ -92,16 +98,6 @@ public class Startup
         {
             endpoints.MapControllers();
         });
-        
-        // add cookie endpoint
-        // app.Map("/cookie", app =>
-        // {
-        //     app.Run(async context =>
-        //     {
-        //         context.Response.Cookies.Append("name", "adham");
-        //         await context.Response.WriteAsync("Hello from cookie endpoint");
-        //     });
-        // });
     }
     
     public void DependencyRegistry(IServiceCollection services)

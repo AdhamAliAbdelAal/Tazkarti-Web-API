@@ -45,7 +45,7 @@ public class AuthHandler
             _configuration["Authentication:Audience"],
             claims,
             DateTime.Now,
-            expires: DateTime.Now.AddMinutes(30),
+            expires: DateTime.Now.AddDays(7),
             signingCredentials: credentials
         );
         string tokenString = new JwtSecurityTokenHandler().WriteToken(token);

@@ -172,6 +172,17 @@ public class TazkartiDbContext : DbContext
             .WithMany(s => s.Matches)
             .HasForeignKey(m => m.StadiumId);
         
+        // check constraints that the match date is not in the past
+        
+        // check constraints that the match is not be played in the stadium that will be played in the same date but with tolerance of 3 hours after and before
+        
+        // check if the home team is not the same as the away team
+        modelBuilder.Entity<MatchDbModel>()
+            .HasCheckConstraint("CK_Match_Team", "HomeTeamId <> AwayTeamId");
+        
+        // check that the team is not playing two matches in 72 hours after and before
+        // check if the seat number is >1 and less than stadium capacity
+        
         
         base.OnModelCreating(modelBuilder);
     }

@@ -22,7 +22,7 @@ public class StadiumsController : Controller
     }
     
     [HttpGet]
-    [Authorize(Roles = Roles.EFAManager)]
+    [Authorize(Policy = "MustBeApprovedEFAManager")]
     public async Task<ActionResult<IEnumerable<StadiumDto>>> GetStadiums([FromQuery] int page = 0, [FromQuery] int limit = 10)
     {
         var stadiums = await _stadiumHandler.GetStadiums(page, limit);
@@ -38,7 +38,7 @@ public class StadiumsController : Controller
     }
     
     [HttpPost]
-    [Authorize(Roles = Roles.EFAManager)]
+    [Authorize(Policy = "MustBeApprovedEFAManager")]
     public async Task<ActionResult<StadiumDto>> AddStadium([FromBody] StadiumDto stadium)
     {
         var stadiumModel = _mapper.Map<StadiumModel>(stadium);

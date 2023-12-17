@@ -74,7 +74,10 @@ public class MatchHandler : IMatchHandler
         }
         catch (Exception e)
         {
-            return null;
+            // if error message contains "UNIQUE constraint" then seat is already reserved or user already reserved a seat in this match so return null
+            if(e.InnerException.Message.Contains("UNIQUE constraint"))
+                return null;
+            throw;
         }
     }
 }
