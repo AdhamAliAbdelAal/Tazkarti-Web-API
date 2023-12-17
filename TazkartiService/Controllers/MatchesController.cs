@@ -96,4 +96,27 @@ public class MatchesController: Controller
             return StatusCode(500, new {message = e.Message});
         }
     }
+    
+    // cancel reservation
+    [HttpDelete]
+    [Route("{id}/{seatNumber}")]
+    [Authorize(Policy = "MustBeApprovedFan")]
+    public async Task<IActionResult> CancelReservation(int id, int seatNumber)
+    {
+        var userId =  int.Parse(User.Claims.FirstOrDefault(c => c.Type == "id")?.Value);
+        try
+        {
+            await _matchHandler.CancelSeatReservation(id, userId, seatNumber);
+            return Ok();
+        }
+        catch (SeatNotReservedException e)
+        {
+            return BadRequest(new {message = e.Message});
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, new {message = e.Message});
+        }
+    }
+    
 }

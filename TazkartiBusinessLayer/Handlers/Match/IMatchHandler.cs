@@ -13,4 +13,6 @@ public interface IMatchHandler
     public Task<bool> IsMatchExists(int id);
     
     public Task<SeatModel?> ReserveSeat(int matchId, int userId,int seatNumber);
+    
+    public Task<bool> CancelSeatReservation(int matchId, int userId,int seatNumber);
 }

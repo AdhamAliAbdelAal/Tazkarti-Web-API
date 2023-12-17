@@ -4,8 +4,10 @@ namespace TazkartiDataAccessLayer.DAOs.Seat;
 
 public interface ISeatDao
 {
-    Task<SeatDbModel?> GetSeatByIdAsync(int id);
+    Task<SeatDbModel?> GetSeatByMatchIdAndUserIdAndSeatNumberAsync(int matchId, int userId, int seatNumber);
     
     Task<SeatDbModel?> AddSeatAsync(SeatDbModel seat);
+    
+    Task<bool> DeleteSeatAsync(SeatDbModel seat);
     
 }

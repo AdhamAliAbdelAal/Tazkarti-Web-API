@@ -109,4 +109,15 @@ public class MatchHandler : IMatchHandler
             throw;
         }
     }
+
+    public async Task<bool> CancelSeatReservation(int matchId, int userId, int seatNumber)
+    {
+        var seat = await _seatDao.GetSeatByMatchIdAndUserIdAndSeatNumberAsync(matchId, userId, seatNumber);
+        if (seat == null)
+        {
+            throw new SeatNotReservedException();
+        }
+        var result = await _seatDao.DeleteSeatAsync(seat);
+        return result;
+    }
 }
