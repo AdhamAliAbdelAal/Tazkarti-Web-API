@@ -4,7 +4,7 @@ namespace TazkartiDataAccessLayer.DAOs.Match;
 
 public interface IMatchDao
 {
-    Task<MatchDbModel?> GetMatchByIdAsync(int id);
+    Task<MatchDbModel?> GetMatchByIdAsync(int id, bool includeSeats = false, bool includeStadium = false, bool includeTeams = false);
     
     Task<MatchDbModel?> AddMatchAsync(MatchDbModel match);
     

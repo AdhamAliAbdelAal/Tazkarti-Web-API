@@ -276,7 +276,7 @@ namespace TazkartiDataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
-                            BirthDate = new DateTime(2023, 12, 17, 12, 51, 10, 80, DateTimeKind.Local).AddTicks(7811),
+                            BirthDate = new DateTime(2023, 12, 17, 13, 5, 41, 450, DateTimeKind.Local).AddTicks(2536),
                             Password = "AQAAAAEAACcQAAAAEOYxMlMfiyJz1mbgW81M0ap6FdaEYndumqz4pESkwohGdesy/P4V9yQzcKiuzdBgqA==",
                             Role = 0,
                             Status = 0,
@@ -298,7 +298,7 @@ namespace TazkartiDataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TazkartiDataAccessLayer.Models.StadiumDbModel", null)
+                    b.HasOne("TazkartiDataAccessLayer.Models.StadiumDbModel", "Stadium")
                         .WithMany("Matches")
                         .HasForeignKey("StadiumId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -307,6 +307,8 @@ namespace TazkartiDataAccessLayer.Migrations
                     b.Navigation("AwayTeam");
 
                     b.Navigation("HomeTeam");
+
+                    b.Navigation("Stadium");
                 });
 
             modelBuilder.Entity("TazkartiDataAccessLayer.Models.SeatDbModel", b =>

@@ -12,6 +12,8 @@ public class MatchDbModel
     [Required]
     public int StadiumId { get; set; }
     
+    public StadiumDbModel Stadium { get; set; }
+    
     [Required]
     public DateTime Date { get; set; }
     

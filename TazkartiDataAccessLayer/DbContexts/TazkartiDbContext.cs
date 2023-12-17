@@ -168,7 +168,7 @@ public class TazkartiDbContext : DbContext
             .HasForeignKey(m => m.AwayTeamId);
         
         modelBuilder.Entity<MatchDbModel>()
-            .HasOne<StadiumDbModel>()
+            .HasOne<StadiumDbModel>(m => m.Stadium)
             .WithMany(s => s.Matches)
             .HasForeignKey(m => m.StadiumId);
         

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TazkartiBusinessLayer.Exceptions;
 using TazkartiBusinessLayer.Handlers.Match;
 using TazkartiBusinessLayer.Models;
 using TazkartiDataAccessLayer.DataTypes;
@@ -54,25 +55,27 @@ public class MatchesController: Controller
     [Authorize(Policy = "MustBeApprovedFan")]
     public async Task<ActionResult<SeatDto>> ReserveSeat(int id, int seatNumber)
     {
-        if(!await _matchHandler.IsMatchExists(id))
-        {
-            return NotFound("Match is not found");
-        }
         var userId =  int.Parse(User.Claims.FirstOrDefault(c => c.Type == "id")?.Value);
-        SeatModel? result = null;
         try
         {
-            result = await _matchHandler.ReserveSeat(id, userId, seatNumber);
-            if (result == null)
-            {
-                return Conflict("Seat is already reserved or user already reserved a seat in this match");
-            }
+            var seat = await _matchHandler.ReserveSeat(id, userId, seatNumber);
+            return Ok(_mapper.Map<SeatDto>(seat));
+        }
+        catch (ResvervedSeatOrUserException e)
+        {
+            return Conflict(new {message = e.Message});
+        }
+        catch (SeatNotFoundException e)
+        {
+            return BadRequest(new {message = e.Message});
+        }
+        catch (MatchNotFoundException e)
+        {
+            return NotFound(new {message = e.Message});
         }
         catch (Exception e)
         {
-            // seat not found
-            return NotFound("Seat is not found");
+            return StatusCode(500, new {message = e.Message});
         }
-        return Ok(_mapper.Map<SeatDto>(result));
     }
 }

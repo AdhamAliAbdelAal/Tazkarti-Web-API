@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TazkartiBusinessLayer.Exceptions;
 using TazkartiBusinessLayer.Models;
 using TazkartiDataAccessLayer.DAOs.Match;
 using TazkartiDataAccessLayer.DAOs.Seat;
@@ -58,6 +59,14 @@ public class MatchHandler : IMatchHandler
 
     public async Task<SeatModel?> ReserveSeat(int matchId, int userId, int seatNumber)
     {
+        var match = await _matchDao.GetMatchByIdAsync(matchId, false, true, false);
+        if(match == null)
+            throw new MatchNotFoundException(matchId);
+        int capacity = match.Stadium.Capacity;
+        if (seatNumber > capacity || seatNumber < 1)
+        {
+            throw new SeatNotFoundException(capacity);
+        }
         var seat = new SeatModel()
         {
             MatchId = matchId,
@@ -76,7 +85,7 @@ public class MatchHandler : IMatchHandler
         {
             // if error message contains "UNIQUE constraint" then seat is already reserved or user already reserved a seat in this match so return null
             if(e.InnerException.Message.Contains("UNIQUE constraint"))
-                return null;
+                throw new ResvervedSeatOrUserException();
             throw;
         }
     }

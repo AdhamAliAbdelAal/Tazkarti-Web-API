@@ -13,10 +13,17 @@ public class MatchDao : IMatchDao
         _context = context;
     }
 
-    public async Task<MatchDbModel?> GetMatchByIdAsync(int id)
+    public async Task<MatchDbModel?> GetMatchByIdAsync(int id, bool includeSeats = false, bool includeStadium = false, bool includeTeams = false)
     {
-        return await _context.Matches
-            .FirstOrDefaultAsync(m => m.Id == id);
+        var query = _context.Matches.AsQueryable();
+        if (includeSeats)
+            query = query.Include(m => m.Seats);
+        if (includeStadium)
+            query = query.Include(m => m.Stadium);
+        if (includeTeams)
+            query = query.Include(m => m.HomeTeam).Include(m => m.AwayTeam);
+        var match = await query.FirstOrDefaultAsync(m => m.Id == id);
+        return match;
     }
 
     public async Task<MatchDbModel?> AddMatchAsync(MatchDbModel match)
