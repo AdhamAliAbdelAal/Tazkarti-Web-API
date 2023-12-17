@@ -9,25 +9,26 @@ using TazkartiService.DTOs;
 namespace TazkartiService.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-public class MatchController: Controller 
+public class MatchesController: Controller 
 {
     private readonly IMatchHandler _matchHandler;
     private readonly IMapper _mapper;
     
-    public MatchController(IMatchHandler matchHandler, IMapper mapper)
+    public MatchesController(IMatchHandler matchHandler, IMapper mapper)
     {
         _matchHandler = matchHandler;
         _mapper = mapper;
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetMatches(int page, int limit)
+    public async Task<IActionResult> GetMatches([FromQuery]int page=0, [FromQuery]int limit = 10)
     {
         var matches = await _matchHandler.GetMatches(page, limit);
         return Ok(_mapper.Map<IEnumerable<MatchDto>>(matches));
     }
     
     [HttpGet]
+    [Route("{id}")]
     public async Task<ActionResult<MatchDto>> GetMatchById(int id)
     {
         var match = await _matchHandler.GetMatchById(id);
