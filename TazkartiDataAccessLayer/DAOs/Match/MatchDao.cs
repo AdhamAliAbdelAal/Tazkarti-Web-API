@@ -13,7 +13,7 @@ public class MatchDao : IMatchDao
         _context = context;
     }
 
-    public async Task<MatchDbModel?> GetMatchByIdAsync(int id, bool includeSeats = false, bool includeStadium = false, bool includeTeams = false)
+    public async Task<MatchDbModel?> GetMatchByIdAsync(int id, bool includeSeats = true, bool includeStadium = true, bool includeTeams = true)
     {
         var query = _context.Matches.AsQueryable();
         if (includeSeats)
@@ -43,6 +43,9 @@ public class MatchDao : IMatchDao
         return await _context.Matches
             .Skip((page - 1) * limit)
             .Take(limit)
+            .Include(m => m.HomeTeam)
+            .Include(m => m.AwayTeam)
+            .Include(m => m.Stadium)
             .ToListAsync();
     }
 

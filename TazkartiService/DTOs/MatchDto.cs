@@ -7,17 +7,17 @@ public class MatchDto
     [JsonPropertyName("id")]
     public int Id { get; set; }
     
-    [JsonPropertyName("stadiumId")]
-    public int StadiumId { get; set; }
+    [JsonPropertyName("stadium")]
+    public StadiumDto Stadium { get; set; }
     
     [JsonPropertyName("date")]
     public DateTime Date { get; set; }
     
-    [JsonPropertyName("homeTeamId")]
-    public int HomeTeamId { get; set; }
+    [JsonPropertyName("homeTeam")]
+    public TeamDto HomeTeam { get; set; }
     
-    [JsonPropertyName("awayTeamId")]
-    public int AwayTeamId { get; set; }
+    [JsonPropertyName("awayTeam")]
+    public TeamDto AwayTeam { get; set; }
     
     [JsonPropertyName("referee")]
     public string Referee { get; set; }
