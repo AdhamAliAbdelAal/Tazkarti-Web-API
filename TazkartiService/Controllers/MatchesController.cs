@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using TazkartiBusinessLayer.Exceptions;
 using TazkartiBusinessLayer.Handlers.Match;
 using TazkartiBusinessLayer.Models;
+using TazkartiBusinessLayer.Notifications;
 using TazkartiDataAccessLayer.DataTypes;
 using TazkartiService.DTOs;
 
@@ -14,11 +15,12 @@ public class MatchesController: Controller
 {
     private readonly IMatchHandler _matchHandler;
     private readonly IMapper _mapper;
-    
-    public MatchesController(IMatchHandler matchHandler, IMapper mapper)
+    private readonly SeatsNotificationsContext _seatsNotificationsContext;
+    public MatchesController(IMatchHandler matchHandler, IMapper mapper, SeatsNotificationsContext seatsNotificationsContext)
     {
         _matchHandler = matchHandler;
         _mapper = mapper;
+        _seatsNotificationsContext = seatsNotificationsContext;
     }
     
     [HttpGet]
@@ -77,6 +79,7 @@ public class MatchesController: Controller
         try
         {
             var seat = await _matchHandler.ReserveSeat(id, userId, seatNumber);
+            await _seatsNotificationsContext.NotifySeatsReserved(id, seatNumber);
             return Ok(_mapper.Map<SeatDto>(seat));
         }
         catch (ResvervedSeatOrUserException e)
@@ -107,6 +110,7 @@ public class MatchesController: Controller
         try
         {
             await _matchHandler.CancelSeatReservation(id, userId, seatNumber);
+            await _seatsNotificationsContext.NotifySeatsCancelled(id, seatNumber);
             return Ok();
         }
         catch (SeatNotReservedException e)
@@ -118,5 +122,35 @@ public class MatchesController: Controller
             return StatusCode(500, new {message = e.Message});
         }
     }
+
+    [HttpPut]
+    [Authorize(Policy = "MustBeApprovedEFAManager")]
+    [Route("{id}")]
+    public async Task<ActionResult<MatchDto>> UpdateMatch([FromRoute] int id,[FromBody] UpdateMatchDto matchDto)
+    {
+        try
+        {
+            var matchModel = _mapper.Map<MatchModel>(matchDto);
+            var result = await _matchHandler.UpdateMatch(id, matchModel);
+            return Ok(_mapper.Map<MatchDto>(result));
+        }
+        catch (MatchDateInPastException e)
+        {
+            return BadRequest(new {message = e.Message});
+        }
+        catch (MatchInSameStadiumInSameDateException e)
+        {
+            return Conflict(new {message = e.Message});
+        }
+        catch (StadiumNotFoundException e)
+        {
+            return NotFound(new {message = e.Message});
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, new {message = e.Message});
+        }
+    }
+    
     
 }

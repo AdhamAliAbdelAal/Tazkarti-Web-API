@@ -32,12 +32,10 @@ public class MatchDao : IMatchDao
         await _context.SaveChangesAsync();
         return await GetMatchByIdAsync(matchEntry.Entity.Id);
     }
-
     public async Task<bool> IsMatchExistsAsync(int id)
     {
         return await _context.Matches.AnyAsync(m => m.Id == id);
     }
-
     public async Task<IEnumerable<MatchDbModel>> GetMatches(int page, int limit)
     {
         return await _context.Matches

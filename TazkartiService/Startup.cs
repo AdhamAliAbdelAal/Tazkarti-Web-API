@@ -137,5 +137,8 @@ public class Startup
         
         // password hasher
         services.AddSingleton<PasswordHasherUtility>();
+        
+        // register notifications context
+        services.AddSingleton<SeatsNotificationsContext>();
     }
 }
