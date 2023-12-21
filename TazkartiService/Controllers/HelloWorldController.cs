@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using TazkartiBusinessLayer.Notifications;
 using TazkartiDataAccessLayer.DataTypes;
 
 namespace TazkartiService.Controllers;
@@ -8,6 +10,11 @@ namespace TazkartiService.Controllers;
 [Route("api/[controller]")]
 public class HelloWorldController: Controller
 {
+    private readonly IHubContext<NotificationHub> _hubContext;
+    public HelloWorldController(IHubContext<NotificationHub> hubContext)
+    {
+        _hubContext = hubContext;
+    }
     [HttpGet]
     [Route("admin")]
     [Authorize(Roles = Roles.SiteAdministrator)]
@@ -30,5 +37,13 @@ public class HelloWorldController: Controller
     public ActionResult<string> Manager()
     {
         return Ok("Hello World Manager");
+    }
+    
+    [HttpGet]
+    [Route("notifier")]
+    public async Task<IActionResult> Notifier()
+    {
+        await _hubContext.Clients.All.SendAsync("ReceiveNotification", "Hello World Notifier");
+        return Ok("notified");
     }
 }

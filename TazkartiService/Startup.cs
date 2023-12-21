@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using TazkartiBusinessLayer.Auth;
 using TazkartiBusinessLayer.Handlers;
 using TazkartiBusinessLayer.Handlers.Match;
+using TazkartiBusinessLayer.Notifications;
 using TazkartiDataAccessLayer.DAOs;
 using TazkartiDataAccessLayer.DAOs.Match;
 using TazkartiDataAccessLayer.DAOs.Seat;
@@ -72,6 +73,24 @@ public class Startup
         
         services.AddDbContext<TazkartiDbContext>(options =>
             options.UseSqlite(this.Configuration["ConnectionStrings:TazkartiDbContextConnection"] ?? string.Empty));
+        
+        services.AddCors(options =>
+        {
+            options.AddPolicy(
+                name: "AllowClients",
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:5173")
+                        .WithMethods("*")
+                        .WithHeaders("*")
+                        .AllowCredentials();
+                });
+        });
+
+        services.AddSignalR(options =>
+        {
+            options.EnableDetailedErrors = true;
+        });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -82,10 +101,7 @@ public class Startup
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name v1"));
         }
         
-        app.UseCors(builder =>
-        {
-            builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-        });
+        app.UseCors("AllowClients");
 
         app.UseHttpsRedirection();
         
@@ -97,6 +113,7 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
+            endpoints.MapHub<NotificationHub>("/notificationHub");
         });
     }
     
