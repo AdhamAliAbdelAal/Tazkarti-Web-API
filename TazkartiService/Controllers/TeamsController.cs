@@ -44,7 +44,7 @@ public class TeamsController: Controller
     }
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TeamDto>>> GetTeams(int page, int limit)
+    public async Task<ActionResult<IEnumerable<TeamDto>>> GetTeams([FromQuery]int page=0, [FromQuery]int limit=10)
     {
         var teams = await _teamHandler.GetTeams(page, limit);
         return Ok(_mapper.Map<IEnumerable<TeamDto>>(teams));

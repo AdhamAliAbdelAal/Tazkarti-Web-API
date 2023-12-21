@@ -5,11 +5,13 @@ using Microsoft.OpenApi.Models;
 using TazkartiBusinessLayer.Auth;
 using TazkartiBusinessLayer.Handlers;
 using TazkartiBusinessLayer.Handlers.Match;
+using TazkartiBusinessLayer.Handlers.Team;
 using TazkartiBusinessLayer.Notifications;
 using TazkartiDataAccessLayer.DAOs;
 using TazkartiDataAccessLayer.DAOs.Match;
 using TazkartiDataAccessLayer.DAOs.Seat;
 using TazkartiDataAccessLayer.DAOs.Stadium;
+using TazkartiDataAccessLayer.DAOs.Team;
 using TazkartiDataAccessLayer.DataTypes;
 using TazkartiDataAccessLayer.DbContexts;
 
@@ -124,11 +126,13 @@ public class Startup
         services.AddScoped<IStadiumDao, StadiumDao>();
         services.AddScoped<IMatchDao, MatchDao>();
         services.AddScoped<ISeatDao, SeatDao>();
+        services.AddScoped<ITeamDao, TeamDao>();
         
         // register handlers
         services.AddScoped<IUserHandler, UserHandler>();
         services.AddScoped<IStadiumHandler, StadiumHandler>();
         services.AddScoped<IMatchHandler, MatchHandler>();
+        services.AddScoped<ITeamHandler, TeamHandler>();
         services.AddScoped<AuthHandler>();
         
         // password hasher
