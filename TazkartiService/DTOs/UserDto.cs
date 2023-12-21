@@ -5,6 +5,9 @@ namespace TazkartiService.DTOs;
 
 public class UserDto
 {
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+    
     [JsonPropertyName("username")]
     public string Username { get; set; } = null!;
     

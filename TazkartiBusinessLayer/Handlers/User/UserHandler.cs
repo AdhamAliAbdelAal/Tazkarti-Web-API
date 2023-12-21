@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using TazkartiBusinessLayer.Auth;
+using TazkartiBusinessLayer.Exceptions;
 using TazkartiBusinessLayer.Models;
 using TazkartiDataAccessLayer.DAOs;
 using TazkartiDataAccessLayer.DataTypes;
@@ -53,7 +55,25 @@ public class UserHandler : IUserHandler
     {
         return await _userDao.DeleteUserAsync(username);
     }
-    
+
+    public async Task<UserModel?> UpdateUser(string username, UserModel userModel)
+    {
+        var user = await _userDao.GetUserByUsernameAsync(username);
+        if (user == null)
+        {
+            throw new UserNotFoundException(username);
+        }
+        user.FirstName = userModel.FirstName;
+        user.LastName = userModel.LastName;
+        user.BirthDate = userModel.BirthDate;
+        user.Gender = userModel.Gender;
+        user.City = userModel.City;
+        user.Address = userModel.Address;
+        user.Password = PasswordHasherUtility.HashPassword(userModel.Password);
+        await _userDao.SaveChanges();
+        return _mapper.Map<UserModel>(user);
+    }
+
     public async Task<bool> ApproveUser(string username)
     {
         var user = await _userDao.GetUserByUsernameAsync(username);

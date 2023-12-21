@@ -12,6 +12,9 @@ public class UserProfile: Profile
         CreateMap<UserDbModel, UserModel>();
         CreateMap<UserModel, UserDbModel>();
         CreateMap<UserModel, UserDto>();
+        CreateMap<UserDto, UserModel>();
+        CreateMap<UpdateUserDto, UserModel>();
+        CreateMap<UserModel, UpdateUserDto>();
     }
     
 }
