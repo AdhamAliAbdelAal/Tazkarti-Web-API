@@ -46,8 +46,8 @@ public class MatchesController: Controller
             try
             {
                 var userId =  int.Parse(User.Claims.FirstOrDefault(c => c.Type == "id")?.Value);
-                var isReservedByMe = await _matchHandler.IsUserReservedSeatInMatch(id, userId);
-                matchDto.IsReservedByMe = isReservedByMe;
+                var seat = await _matchHandler.GetSeatReservedByUser(id, userId);
+                matchDto.SeatReservedByMe = seat;
             }
             catch (Exception e)
             {

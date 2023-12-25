@@ -21,4 +21,6 @@ public interface IMatchHandler
     public Task<bool> IsSeatReservedByUser(int matchId, int userId, int seatNumber);
     
     public Task<bool> IsUserReservedSeatInMatch(int matchId, int userId);
+    
+    public Task<int> GetSeatReservedByUser(int matchId, int userId);
 }

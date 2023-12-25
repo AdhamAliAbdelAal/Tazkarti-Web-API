@@ -176,4 +176,14 @@ public class MatchHandler : IMatchHandler
         var seat = await _seatDao.GetSeatByMatchIdAndUserIdAsync(matchId, userId);
         return seat != null;
     }
+
+    public async Task<int> GetSeatReservedByUser(int matchId, int userId)
+    {
+        var seat = await _seatDao.GetSeatByMatchIdAndUserIdAsync(matchId, userId);
+        if (seat == null)
+        {
+            return -1;
+        }
+        return seat.Number;
+    }
 }
