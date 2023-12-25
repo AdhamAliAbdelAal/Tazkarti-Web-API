@@ -11,6 +11,8 @@ public class StadiumProfile : Profile
     {
         CreateMap<StadiumModel, StadiumDbModel>();
         CreateMap<StadiumDbModel, StadiumModel>();
+        CreateMap<StadiumModel, AddStadiumDto>();
+        CreateMap<AddStadiumDto, StadiumModel>();
         CreateMap<StadiumModel, StadiumDto>();
         CreateMap<StadiumDto, StadiumModel>();
     }

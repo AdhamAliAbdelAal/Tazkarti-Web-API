@@ -2,11 +2,8 @@
 
 namespace TazkartiService.DTOs;
 
-public class StadiumDto
+public class AddStadiumDto
 {
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
-    
     [JsonPropertyName("name")]
     public string Name { get; set; }
     

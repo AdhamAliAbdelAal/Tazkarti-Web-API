@@ -39,9 +39,9 @@ public class StadiumsController : Controller
     
     [HttpPost]
     [Authorize(Policy = "MustBeApprovedEFAManager")]
-    public async Task<ActionResult<StadiumDto>> AddStadium([FromBody] StadiumDto stadium)
+    public async Task<ActionResult<StadiumDto>> AddStadium([FromBody] AddStadiumDto addStadium)
     {
-        var stadiumModel = _mapper.Map<StadiumModel>(stadium);
+        var stadiumModel = _mapper.Map<StadiumModel>(addStadium);
         var result = await _stadiumHandler.AddStadium(stadiumModel);
         return result == null ? Conflict() : Created("", _mapper.Map<StadiumDto>(result));
     }
