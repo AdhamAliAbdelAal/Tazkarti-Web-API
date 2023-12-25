@@ -30,4 +30,7 @@ public class MatchDto
     
     [JsonPropertyName("seats")]
     public IEnumerable<SeatDto> Seats { get; set; }
+    
+    [JsonPropertyName("isReservedByMe")]
+    public bool? IsReservedByMe { get; set; }
 }

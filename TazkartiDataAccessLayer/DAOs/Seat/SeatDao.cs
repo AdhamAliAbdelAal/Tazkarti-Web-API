@@ -19,6 +19,12 @@ public class SeatDao : ISeatDao
             .FirstOrDefaultAsync(s => s.MatchId == matchId && s.UserId == userId && s.Number == seatNumber);
     }
 
+    public async Task<SeatDbModel?> GetSeatByMatchIdAndUserIdAsync(int matchId, int userId)
+    {
+        return await _context.Seats
+            .FirstOrDefaultAsync(s => s.MatchId == matchId && s.UserId == userId);
+    }
+
     public async Task<SeatDbModel?> AddSeatAsync(SeatDbModel seat)
     {
         await _context.Seats.AddAsync(seat);

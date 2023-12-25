@@ -32,14 +32,29 @@ public class MatchesController: Controller
     
     [HttpGet]
     [Route("{id}")]
-    public async Task<ActionResult<MatchDto>> GetMatchById(int id)
+    public async Task<ActionResult<MatchDto>> GetMatchById([FromRoute]int id, [FromQuery] bool reservedByMe = false)
     {
         var match = await _matchHandler.GetMatchById(id);
         if (match == null)
         {
             return NotFound();
         }
-        return Ok(_mapper.Map<MatchDto>(match));
+
+        var matchDto = _mapper.Map<MatchDto>(match);
+        if (reservedByMe)
+        {
+            try
+            {
+                var userId =  int.Parse(User.Claims.FirstOrDefault(c => c.Type == "id")?.Value);
+                var isReservedByMe = await _matchHandler.IsUserReservedSeatInMatch(id, userId);
+                matchDto.IsReservedByMe = isReservedByMe;
+            }
+            catch (Exception e)
+            {
+                return Unauthorized();
+            }
+        }
+        return Ok(matchDto);
     }
     
     [HttpPost]

@@ -17,4 +17,8 @@ public interface IMatchHandler
     public Task<bool> CancelSeatReservation(int matchId, int userId,int seatNumber);
     
     public Task<MatchModel?> UpdateMatch(int id, MatchModel match);
+    
+    public Task<bool> IsSeatReservedByUser(int matchId, int userId, int seatNumber);
+    
+    public Task<bool> IsUserReservedSeatInMatch(int matchId, int userId);
 }

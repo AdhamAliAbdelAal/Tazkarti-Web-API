@@ -164,4 +164,16 @@ public class MatchHandler : IMatchHandler
             throw new Exception("Invalid match data");
         }
     }
+
+    public async Task<bool> IsSeatReservedByUser(int matchId, int userId, int seatNumber)
+    {
+        var seat = await _seatDao.GetSeatByMatchIdAndUserIdAndSeatNumberAsync(matchId, userId, seatNumber);
+        return seat != null;
+    }
+
+    public async Task<bool> IsUserReservedSeatInMatch(int matchId, int userId)
+    {
+        var seat = await _seatDao.GetSeatByMatchIdAndUserIdAsync(matchId, userId);
+        return seat != null;
+    }
 }
