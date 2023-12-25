@@ -44,6 +44,6 @@ public class HelloWorldController: Controller
     public async Task<IActionResult> Notifier()
     {
         await _hubContext.Clients.All.SendAsync("ReceiveNotification", "Hello World Notifier");
-        return Ok("notified");
+        return Ok("adham ali");
     }
 }
