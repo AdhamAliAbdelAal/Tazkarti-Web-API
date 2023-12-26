@@ -117,6 +117,12 @@ public class MatchHandler : IMatchHandler
         {
             throw new SeatNotReservedException();
         }
+        // check if the match is in more than 3 days
+        var match = await _matchDao.GetMatchByIdAsync(matchId);
+        if (match == null)
+            throw new MatchNotFoundException(matchId);
+        if (match.Date < DateTime.Now.AddDays(3))
+            throw new CannotCancelReservationException();
         var result = await _seatDao.DeleteSeatAsync(seat);
         return result;
     }
@@ -185,5 +191,14 @@ public class MatchHandler : IMatchHandler
             return -1;
         }
         return seat.Number;
+    }
+
+    public async Task DeleteMatch(int id)
+    {
+        var result = await _matchDao.DeleteMatchAsync(id);
+        if (!result)
+        {
+            throw new MatchNotFoundException(id);
+        }
     }
 }

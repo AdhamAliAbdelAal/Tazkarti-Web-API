@@ -51,4 +51,14 @@ public class MatchDao : IMatchDao
     {
         return await _context.SaveChangesAsync();
     }
+
+    public async Task<bool> DeleteMatchAsync(int id)
+    {
+        var match = await _context.Matches.FirstOrDefaultAsync(m => m.Id == id);
+        if (match == null)
+            return false;
+        _context.Matches.Remove(match);
+        await _context.SaveChangesAsync();
+        return true;
+    }
 }

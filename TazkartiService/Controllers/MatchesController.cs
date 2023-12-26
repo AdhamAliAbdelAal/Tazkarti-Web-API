@@ -132,6 +132,10 @@ public class MatchesController: Controller
         {
             return BadRequest(new {message = e.Message});
         }
+        catch (CannotCancelReservationException e)
+        {
+            return Forbid(e.Message);
+        }
         catch (Exception e)
         {
             return StatusCode(500, new {message = e.Message});
@@ -158,6 +162,26 @@ public class MatchesController: Controller
             return Conflict(new {message = e.Message});
         }
         catch (StadiumNotFoundException e)
+        {
+            return NotFound(new {message = e.Message});
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, new {message = e.Message});
+        }
+    }
+    
+    [HttpDelete]
+    [Authorize("MustBeApprovedEFAManager")]
+    [Route("{id}")]
+    public async Task<IActionResult> DeleteMatch([FromRoute] int id)
+    {
+        try
+        {
+            await _matchHandler.DeleteMatch(id);
+            return Ok();
+        }
+        catch (MatchNotFoundException e)
         {
             return NotFound(new {message = e.Message});
         }

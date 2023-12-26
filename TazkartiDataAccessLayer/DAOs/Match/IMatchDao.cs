@@ -13,4 +13,6 @@ public interface IMatchDao
     Task<IEnumerable<MatchDbModel>> GetMatches(int page, int limit);
     
     Task<int> SaveChanges();
+    
+    Task<bool> DeleteMatchAsync(int id);
 }

@@ -23,4 +23,6 @@ public interface IMatchHandler
     public Task<bool> IsUserReservedSeatInMatch(int matchId, int userId);
     
     public Task<int> GetSeatReservedByUser(int matchId, int userId);
+    
+    public Task DeleteMatch(int id);
 }
