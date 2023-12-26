@@ -134,7 +134,7 @@ public class MatchesController: Controller
         }
         catch (CannotCancelReservationException e)
         {
-            return Forbid(e.Message);
+            return Forbid();
         }
         catch (Exception e)
         {

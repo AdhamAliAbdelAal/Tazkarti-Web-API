@@ -121,8 +121,11 @@ public class MatchHandler : IMatchHandler
         var match = await _matchDao.GetMatchByIdAsync(matchId);
         if (match == null)
             throw new MatchNotFoundException(matchId);
-        if (match.Date < DateTime.Now.AddDays(3))
+        var date = DateTime.Now.AddDays(3);
+        if (match.Date < date)
+        {
             throw new CannotCancelReservationException();
+        }
         var result = await _seatDao.DeleteSeatAsync(seat);
         return result;
     }
