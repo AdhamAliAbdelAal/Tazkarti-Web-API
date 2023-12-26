@@ -18,4 +18,6 @@ public interface IUserHandler
     public Task<bool> ApproveUser(string username);
 
     public Task<IEnumerable<UserModel>> GetUsers(int page, int limit);
+    
+    public Task<IEnumerable<MatchModel>> GetMatchesReservedByUser(string username); 
 }

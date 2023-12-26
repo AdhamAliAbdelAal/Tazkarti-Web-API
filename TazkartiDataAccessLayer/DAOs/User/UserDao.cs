@@ -15,7 +15,9 @@ public class UserDao : IUserDao
 
     public async Task<UserDbModel?> GetUserByUsernameAsync(string username)
     {
-        var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Username == username);
+        var user = await _dbContext.Users
+            .Include(u => u.Seats)
+            .FirstOrDefaultAsync(user => user.Username == username);
         return user;
     }
     

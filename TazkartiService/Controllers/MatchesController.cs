@@ -166,6 +166,4 @@ public class MatchesController: Controller
             return StatusCode(500, new {message = e.Message});
         }
     }
-    
-    
 }

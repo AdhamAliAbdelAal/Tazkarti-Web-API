@@ -3,6 +3,8 @@ using TazkartiBusinessLayer.Auth;
 using TazkartiBusinessLayer.Exceptions;
 using TazkartiBusinessLayer.Models;
 using TazkartiDataAccessLayer.DAOs;
+using TazkartiDataAccessLayer.DAOs.Match;
+using TazkartiDataAccessLayer.DAOs.Seat;
 using TazkartiDataAccessLayer.DataTypes;
 using TazkartiDataAccessLayer.Models;
 
@@ -12,11 +14,13 @@ public class UserHandler : IUserHandler
 {
     private readonly IMapper _mapper;
     private readonly IUserDao _userDao;
+    private readonly IMatchDao _matchDao;
 
-    public UserHandler(IMapper mapper, IUserDao userDao)
+    public UserHandler(IMapper mapper, IUserDao userDao, IMatchDao matchDao)
     {
         _mapper = mapper;
         _userDao = userDao;
+        _matchDao = matchDao;
     }
 
     public async Task<UserModel?> GetUserByUsername(string username)
@@ -90,5 +94,19 @@ public class UserHandler : IUserHandler
     {
         var users = await _userDao.GetUsers(page, limit);
         return _mapper.Map<IEnumerable<UserModel>>(users);
+    }
+
+    public async Task<IEnumerable<MatchModel>> GetMatchesReservedByUser(string username)
+    {
+        var user = await _userDao.GetUserByUsernameAsync(username);
+        var seats = user.Seats;
+        // get all matches
+        IEnumerable<MatchModel> matches = new List<MatchModel>();
+        foreach (var seat in seats)
+        {
+            var match = await _matchDao.GetMatchByIdAsync(seat.MatchId);
+            matches = matches.Append(_mapper.Map<MatchModel>(match));
+        }
+        return matches;
     }
 }

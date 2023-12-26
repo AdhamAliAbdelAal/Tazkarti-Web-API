@@ -84,4 +84,19 @@ public class UsersController : Controller
             return StatusCode(500, new {message = e.Message});
         }
     }
+    
+    [HttpGet]
+    [Route("{username}/matches")]
+    [Authorize("MustBeApprovedFan")]
+    public async Task<ActionResult<IEnumerable<MatchDto>>> GetMatches([FromRoute] string username)
+    {
+        
+        var usernameClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "username");
+        if (usernameClaim == null || usernameClaim.Value != username)
+        {
+            return Forbid("You are not allowed to update other users");
+        }
+        var matches = await _userHandler.GetMatchesReservedByUser(username);
+        return Ok(_mapper.Map<IEnumerable<MatchDto>>(matches));
+    }
 }
